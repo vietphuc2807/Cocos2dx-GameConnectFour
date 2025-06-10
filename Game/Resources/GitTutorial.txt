@@ -1,0 +1,21 @@
+--------------------------------------------------------------------
+Muốn đẩy thư mục lên Git thì thư mục đó phải có file Git bằng lệnh : 
+git init
+--------------------------------------------------------------------
+Để add tất cả dùng lệnh:
+git add .
+--------------------------------------------------------------------
+Để add nhưng file cụ thể thì dùng lệnh:
+git add |địa chỉ file|
+--------------------------------------------------------------------
+Trước khi push thì phải commit thì dùng lệnh:
+git commit -m '..'
+
+Lưu ý:
+Dấu - là add 
+Dấu + là update 
+Dấu ! là quan trọng
+Dấu * là lưu ý
+--------------------------------------------------------------------
+Lệnh push:
+git push |link git| master
