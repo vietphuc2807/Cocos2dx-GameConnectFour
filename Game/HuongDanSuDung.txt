@@ -1,0 +1,11 @@
+B1: Tạo project cocos2dx, xong build cho chạy thành công
+B2: Tải project trên GitHub https://github.com/vietphuc2807/Cocos2dx-GameConnectFour.git
+
+(Mở cmd, chạy lệnh 
+git clone https://github.com/vietphuc2807/Cocos2dx-GameConnectFour.git)
+
+B3: Copy hai thư mục Classes và Resource vào project đã tạo ở bước 1
+-> nếu lỗi resource thì copy thư mục resource vào proj.win32\bin\(Tên_Project)t\Debug, thay thế thư mục resoure kia
+
+B4: Xóa các file đã có trong classes Visual, rồi bỏ các file .cpp .h trong thư mục project game vào visual lại 
+
