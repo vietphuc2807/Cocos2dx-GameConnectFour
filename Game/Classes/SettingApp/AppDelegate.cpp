@@ -23,21 +23,25 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "Scene/LoadingEngine_Scene.h"
+#include "Scene/MainMenuGame_Scene.h"
+#include "Scene/SelectModeScene.h"
+#include "GamePlayScene/GameNormalScene.h"
+#include "Scene/Player1SetUp_Scene.h"
 
 // #define USE_AUDIO_ENGINE 1
 
 #if USE_AUDIO_ENGINE
-#include "audio/include/AudioEngine.h"
+#include "audio/include/AudioEngine.h"  
 using namespace cocos2d::experimental;
 #endif
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
-static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
-static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1080, 1920);
+static cocos2d::Size smallResolutionSize = cocos2d::Size(720, 1280);
+static cocos2d::Size mediumResolutionSize = cocos2d::Size(1080, 1920);
+static cocos2d::Size largeResolutionSize = cocos2d::Size(1440, 2560);
 
 AppDelegate::AppDelegate()
 {
@@ -73,7 +77,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("Game", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect("Fruit Connect", cocos2d::Rect(0, 0, 540, 960), 1.0f, true); 
 #else
         glview = GLViewImpl::create("Game");
 #endif
@@ -87,7 +91,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0f / 60);
 
     // Set the design resolution
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
+    glview->setDesignResolutionSize(1080, 1920, ResolutionPolicy::NO_BORDER);
     auto frameSize = glview->getFrameSize();
     // if the frame's height is larger than the height of medium size.
     if (frameSize.height > mediumResolutionSize.height)
@@ -108,7 +112,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = LoadingEngineScene::createScene();
 
     // run
     director->runWithScene(scene);
