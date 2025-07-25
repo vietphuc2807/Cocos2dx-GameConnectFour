@@ -1,4 +1,5 @@
 #include "Scene/SelectModeScene.h"
+#include "GamePlayScene/GameRiotScene.h"
 #include "GamePlayScene/GameNormalScene.h"
 #include "Manager/SoundManager.h"
 
@@ -83,6 +84,6 @@ void SelectModeScene::startGame()
 	}
 	else if (selectedMode == "Riot")
 	{
-		/*Director::getInstance()->replaceScene(TransitionFade::create(0.3f, GameplayRiotScene::createScene()));*/
+		Director::getInstance()->replaceScene(TransitionFade::create(0.3f, GameRiotScene::createScene()));
 	}
 }

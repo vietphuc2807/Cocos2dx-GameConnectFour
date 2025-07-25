@@ -226,7 +226,7 @@ void GameNormalScene::initBoard()
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	}
 
-	//DEBUG
+	////DEBUG
 	//for (int row = 0; row < 6; row++) {
 	//	for (int col = 0; col < 5; col++) {
 	//		auto marker = Sprite::create("UI/tron.png"); 
@@ -253,7 +253,7 @@ void GameNormalScene::dropPiece(int col)
 			std::string spritePath = "UI/" + fruit + ".png";
 
 			auto piece = Sprite::create(spritePath);
-			piece->setScale(1.0f);
+			piece->setScale(1.1f);
 
 			Vec2 targetPos = cellPositions[row][col];
 			// Bat dau roi tu tren xuong 
