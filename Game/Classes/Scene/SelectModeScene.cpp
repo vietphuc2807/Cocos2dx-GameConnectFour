@@ -1,7 +1,7 @@
 #include "Scene/SelectModeScene.h"
-#include "GamePlayScene/GameRiotScene.h"
 #include "GamePlayScene/GameNormalScene.h"
 #include "Manager/SoundManager.h"
+#include "GamePlayScene/GameRiotScene.h"
 
 USING_NS_CC;
 

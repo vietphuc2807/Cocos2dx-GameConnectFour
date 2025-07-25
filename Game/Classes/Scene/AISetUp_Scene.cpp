@@ -89,9 +89,11 @@ void AISetUpScene::UIGameSetup() {
             }
         }
 
-        GameManager::getInstance()->playerAI.name = "ROBOT";
+        std::vector<std::string> aiNames = { "John", "Mery", "Andy", "James", "Messi", "Neymar", "Wayne", "Lisa", "Pedri", "Rodri", "Yamal" };
+        int randomIndex = RandomHelper::random_int(0, static_cast<int>(aiNames.size() - 1));
+        GameManager::getInstance()->playerAI.name = aiNames[randomIndex];
+        Director::getInstance()->replaceScene(TransitionFade::create(0.3f, GameAIScene::createScene()));
 
-       /* Director::getInstance()->replaceScene(TransitionFade::create(0.3f, GameAIScene::createScene()));*/
         });
 }
 

@@ -39,9 +39,14 @@ public:
         }
     }
 
+    float getSFXVolume() const {
+        return cocos2d::UserDefault::getInstance()->getFloatForKey("sfx_volume", 0.5f);
+    }
+
     void playSFX(const std::string& path, float volume = 0.5f)
     {
         if (!soundEnabled) return;
+        volume = getSFXVolume();
         int sfxID = cocos2d::AudioEngine::play2d(path, false);
         cocos2d::AudioEngine::setVolume(sfxID, volume);
     }

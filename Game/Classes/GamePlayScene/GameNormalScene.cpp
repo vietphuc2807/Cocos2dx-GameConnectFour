@@ -2,7 +2,8 @@
 #include "Scene/MainMenuGame_Scene.h"
 #include "Manager/GameManager.h";
 #include "Manager/SoundManager.h";
-#include "Utils.h"
+#include "Utils/Utils.h"
+#include "GamePlayScene/Popups.h"
 #include <vector>
 
 USING_NS_CC;
@@ -30,7 +31,7 @@ bool GameNormalScene::init()
 	SoundManager::getInstance()->setBackgroundMusicVolume(musicVolume);
 
 	// Player 1 bat dau
-	currentPlayer = 1; 
+	currentPlayer = 1;
 
 	// Reset lai toan bo ban choi
 	memset(board, 0, sizeof(board));
@@ -226,7 +227,7 @@ void GameNormalScene::initBoard()
 		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	}
 
-	////DEBUG
+	//DEBUG
 	//for (int row = 0; row < 6; row++) {
 	//	for (int col = 0; col < 5; col++) {
 	//		auto marker = Sprite::create("UI/tron.png"); 
@@ -255,8 +256,8 @@ void GameNormalScene::dropPiece(int col)
 			auto piece = Sprite::create(spritePath);
 			piece->setScale(1.1f);
 
-			Vec2 targetPos = cellPositions[row][col];
 			// Bat dau roi tu tren xuong 
+			Vec2 targetPos = cellPositions[row][col];
 			Vec2 startPos = Vec2(targetPos.x, cellPositions[5][col].y + 150); 
 			piece->setPosition(startPos);
 			BackgroundGame->addChild(piece);
@@ -269,24 +270,12 @@ void GameNormalScene::dropPiece(int col)
 
 			// Kiem tra thang 
 			if(Utils::checkWin(board,row,col)){
-				// VIẾT TẠM // ( chỗ này là popup scene win trong figma )
-				auto alert = Label::createWithTTF("Player " + std::to_string(currentPlayer) + " wins!", "fonts/Marker Felt.ttf", 80);
-				alert->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2));
-				alert->setColor(Color3B::RED);
-				BackgroundGame->addChild(alert, 100);
-				_eventDispatcher->removeAllEventListeners();
-				return; 
+				Popups::showPopupWin(this, currentPlayer);
 			}
 
 			// Kiem tra hoa
 			if (Utils::isBoardFull(board)) {
-				// VIẾT TẠM // ( chỗ này là popup scene draw trong figma )
-				auto alert = Label::createWithTTF("It's a Draw!", "fonts/Marker Felt.ttf", 80);
-				alert->setPosition(Director::getInstance()->getVisibleSize() / 2);
-				alert->setColor(Color3B::GRAY);
-				BackgroundGame->addChild(alert, 100);
-				_eventDispatcher->removeAllEventListeners();
-				return;
+				Popups::showPopupDraw(this, currentPlayer);
 			}
 
 			// Doi luot choi
@@ -347,3 +336,4 @@ void GameNormalScene::switchTurn()
 	currentPlayer = (currentPlayer == 1) ? 2 : 1;
 	updatePlayerInfoUI();
 }
+

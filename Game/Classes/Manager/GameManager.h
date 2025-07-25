@@ -21,6 +21,11 @@ public:
 
 	PlayerInfo playerWithAI;
     PlayerInfo playerAI;
+
+    std::string gameMode; 
+    int currentPlayer = 1; 
+
+    int board[6][5] = {}; 
 private:
     GameManager() {}
 };

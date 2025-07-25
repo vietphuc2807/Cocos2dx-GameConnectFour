@@ -1,4 +1,4 @@
-#include "Utils.h"
+#include "Utils/Utils.h"
 
 bool Utils::checkWin(int board[6][5], int row, int col)
 {
@@ -25,7 +25,6 @@ bool Utils::checkWin(int board[6][5], int row, int col)
         if (count >= 4)
             return true;
     }
-
     return false;
 }
 

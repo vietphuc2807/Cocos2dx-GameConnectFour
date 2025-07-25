@@ -1,9 +1,11 @@
-﻿#include "GamePlayScene/GameRiotScene.h"
+#include "GamePlayScene/GameRiotScene.h"
 #include "Scene/MainMenuGame_Scene.h"
 #include "Manager/GameManager.h";
 #include "Manager/SoundManager.h";
-#include "Utils.h"
+#include "Utils/Utils.h"
 #include "ui/CocosGUI.h"
+#include "GamePlayScene/Popups.h"
+
 using namespace cocos2d::ui;
 USING_NS_CC;
 
@@ -208,69 +210,7 @@ void GameRiotScene::showPauseMenuPopup()
 		});
 	dimLayer->addChild(newGameButton);
 
-	// Hiển thị đồng hồ 2 người chơi
-	//timeLabel1 = Label::createWithSystemFont("03:00", "Arial", 30);
-	//timeLabel1->setPosition(Vec2(500, 1200));
-	//BackgroundGame->addChild(timeLabel1,1000);
-
-	//timeLabel2 = Label::createWithSystemFont("03:00", "Arial", 30);
-	//timeLabel2->setPosition(Vec2(500, 1100));
-	//BackgroundGame->addChild(timeLabel2,1000);
-
-	// Bắt đầu cập nhật thời gian mỗi giây
-	//this->schedule(CC_SCHEDULE_SELECTOR(GameRiotScene::updateTimer), 1.0f);
-
 }
-//void GameRiotScene::updateTimer(float dt)
-//{
-//	if (playerTurn == 1)
-//	{
-//		timePlayer1--;
-//		updateTimeLabel(timeLabel1, timePlayer1);
-//
-//		if (timePlayer1 <= 0)
-//		{
-//			unschedule(CC_SCHEDULE_SELECTOR(GameRiotScene::updateTimer));
-//			showLose(1); // người chơi 1 hết giờ
-//		}
-//	}
-//	else if (playerTurn == 2)
-//	{
-//		timePlayer2--;
-//		updateTimeLabel(timeLabel2, timePlayer2);
-//
-//		if (timePlayer2 <= 0)
-//		{
-//			unschedule(CC_SCHEDULE_SELECTOR(GameRiotScene::updateTimer));
-//			showLose(2); // người chơi 2 hết giờ
-//		}
-//	}
-//}
-//void GameRiotScene::updateTimeLabel(Label* label, int time)
-//{
-//	int minutes = time / 60;
-//	int seconds = time % 60;
-//	char buffer[10];
-//	sprintf(buffer, "%02d:%02d", minutes, seconds);
-//	label->setString(buffer);
-//}
-//void GameRiotScene::showLose(int player)
-//{
-//	std::string msg = "Player " + std::to_string(player) + " hết giờ! Thua cuộc.";
-//	auto loseLabel = Label::createWithSystemFont(msg, "Arial", 40);
-//	loseLabel->setPosition(Director::getInstance()->getVisibleSize() / 2);
-//	loseLabel->setColor(Color3B::RED);
-//	this->addChild(loseLabel, 9999);
-//
-//	// Nếu muốn reset hoặc về menu sau vài giây:
-//	this->runAction(Sequence::create(
-//		DelayTime::create(3.0f),
-//		CallFunc::create([]() {
-//			Director::getInstance()->replaceScene(GameRiotScene::create()); // hoặc menu
-//			}),
-//		nullptr
-//	));
-//}
 
 void GameRiotScene::initBoard()
 {
@@ -334,7 +274,7 @@ void GameRiotScene::initBoard()
 	//		marker->setPosition(cellPositions[row][col]);
 	//		BackgroundGame->addChild(marker, 10); 
 	//	}
-	//} // dùng để debug đánh dấu vị trí các ô trên bàn chơi xem ở đâu 
+	//} // d�ng ?? debug ?�nh d?u v? tr� c�c � tr�n b�n ch?i xem ? ?�u 
 
 }
 void GameRiotScene::dropPiece(int col)
@@ -384,22 +324,12 @@ void GameRiotScene::dropPiece(int col)
 
 			// Kiem tra thang 
 			if (Utils::checkWin(board, row, col)) {
-				auto alert = Label::createWithTTF("Player " + std::to_string(currentPlayer) + " wins!", "fonts/Marker Felt.ttf", 80);
-				alert->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2));
-				alert->setColor(Color3B::RED);
-				BackgroundGame->addChild(alert, 100);
-				_eventDispatcher->removeAllEventListeners();
-				return;
+				Popups::showPopupWin(this, currentPlayer);
 			}
 
 			// Kiem tra hoa
 			if (Utils::isBoardFull(board)) {
-				auto alert = Label::createWithTTF("It's a Draw!", "fonts/Marker Felt.ttf", 80);
-				alert->setPosition(Director::getInstance()->getVisibleSize() / 2);
-				alert->setColor(Color3B::GRAY);
-				BackgroundGame->addChild(alert, 100);
-				_eventDispatcher->removeAllEventListeners();
-				return;
+				Popups::showPopupDraw(this, currentPlayer);
 			}
 
 			// Doi luot choi
@@ -440,11 +370,11 @@ void GameRiotScene::RandomPos(float dt)
 
 	int col = RandomHelper::random_int(0, static_cast<int>(Pos.size()) - 1);
 
-	// Di chuyển Gun đến cột random
+	// Di chuy?n Gun ??n c?t random
 	auto move = MoveTo::create(0.5f, Pos[col]);
 	auto easeMove = EaseSineInOut::create(move);
 
-	// Sau khi Gun di chuyển xong thì thả bom
+	// Sau khi Gun di chuy?n xong th� th? bom
 	auto dropBom = CallFunc::create([=]() {
 		for (int row = 0; row < 6; row++)
 		{
@@ -463,19 +393,19 @@ void GameRiotScene::RandomPos(float dt)
 
 				auto fall = MoveTo::create(1.0f, targetPos);
 
-				// Sau khi bom rơi xong → Xóa các piece liền kề
+				// Sau khi bom r?i xong ? X�a c�c piece li?n k?
 				auto removeNearby = CallFunc::create([=]() {
-					// Phát âm thanh nổ
+					// Ph�t �m thanh n?
 
 					SoundManager::getInstance()->playSFX("Sound/no.mp3");
 
-					// Tạo sprite explosion ở vị trí bom
+					// T?o sprite explosion ? v? tr� bom
 					auto explosion = Sprite::create("UI/no-1.png");
-					explosion->setScale(2.0f); // to hơn để dễ nhìn
+					explosion->setScale(2.0f); // to h?n ?? d? nh�n
 					explosion->setPosition(Bom->getPosition());
 					BackgroundGame->addChild(explosion, 3000);
 
-					// Tạo animation từ 7 frame
+					// T?o animation t? 7 frame
 					Vector<SpriteFrame*> frames;
 					for (int i = 1; i <= 7; i++)
 					{
@@ -495,7 +425,7 @@ void GameRiotScene::RandomPos(float dt)
 						});
 					explosion->runAction(Sequence::create(animate, removeExplosion, nullptr));
 
-					// Xóa các piece xung quanh 4 hướng
+					// X�a c�c piece xung quanh 4 h??ng
 					const int dx[] = { -1, 1, 0, 0 };
 					const int dy[] = { 0, 0, -1, 1 };
 
@@ -518,7 +448,7 @@ void GameRiotScene::RandomPos(float dt)
 						}
 					}
 
-					// Xóa bom
+					// X�a bom
 					if (pieceSprites[row][col])
 					{
 						pieceSprites[row][col]->removeFromParent();

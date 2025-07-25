@@ -3,6 +3,7 @@
 #include "Scene/AISetUp_Scene.h"
 #include "audio/include/AudioEngine.h"
 #include "Manager/SoundManager.h"
+#include "GamePlayScene/GameNormalScene.h"
 
 USING_NS_CC;
 
@@ -203,7 +204,7 @@ void MainMenuGameScene::showPauseMenuPopupOne() {
 		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
 		dimLayer->removeFromParent();
 		});
-} // con nut resume lam sau (luu du lieu game)
+} 
 
 void MainMenuGameScene::showPauseMenuPopupTwo() {
 	auto Size = Director::getInstance()->getVisibleSize();
@@ -246,6 +247,17 @@ void MainMenuGameScene::showPauseMenuPopupTwo() {
 		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
 		dimLayer->removeFromParent();
 		});
+
+	//// Resume button
+	//auto resumeButton = ui::Button::create("UI/resume1.png", "UI/resume2.png");
+	//resumeButton->setPosition(Vec2(Size.width / 2 + 95 + Origin.x, Size.height / 2 - 290 + Origin.y));
+	//popup->addChild(resumeButton);
+
+	//resumeButton->addClickEventListener([=](Ref* sender) {
+	//	SoundManager::getInstance()->playSFX("Sound/Click.mp3");
+	//	dimLayer->removeFromParent();
+	//	});
+
 } // con nut resume lam sau (luu du lieu game)
 
 void MainMenuGameScene::showOptionsPopup() {
@@ -317,7 +329,6 @@ void MainMenuGameScene::showOptionsPopup() {
 
 	backButton->addClickEventListener([=](Ref* sender) {
 		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
-
 		SoundManager::getInstance()->setBackgroundMusicVolume(originalMusicVolume);
 
 		dimLayer->removeFromParent();

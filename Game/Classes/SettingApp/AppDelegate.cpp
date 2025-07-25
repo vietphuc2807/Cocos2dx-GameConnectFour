@@ -91,7 +91,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     director->setAnimationInterval(1.0f / 60);
 
     // Set the design resolution
-    glview->setDesignResolutionSize(1080, 1920, ResolutionPolicy::NO_BORDER);
+    glview->setDesignResolutionSize(1080, 1920, ResolutionPolicy::EXACT_FIT);
     auto frameSize = glview->getFrameSize();
     // if the frame's height is larger than the height of medium size.
     if (frameSize.height > mediumResolutionSize.height)
@@ -112,7 +112,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = Player1SetUpScene::createScene();
+    auto scene = LoadingEngineScene::createScene();
 
     // run
     director->runWithScene(scene);
