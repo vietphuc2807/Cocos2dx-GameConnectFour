@@ -1,9 +1,9 @@
 #include "Scene/MainMenuGame_Scene.h"
 #include "Scene/Player1SetUp_Scene.h"
 #include "Scene/AISetUp_Scene.h"
+#include "Manager/StatsManager.h"
 #include "audio/include/AudioEngine.h"
 #include "Manager/SoundManager.h"
-#include "GamePlayScene/GameNormalScene.h"
 
 USING_NS_CC;
 
@@ -85,6 +85,16 @@ void MainMenuGameScene::UIGameSetup()
 	twoPlayerButton->addClickEventListener([=](Ref* sender) {
 		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
 		this->showPauseMenuPopupTwo();
+		});
+
+	// Stats 
+	auto statsButton = ui::Button::create("UI/statsButton.png", "UI/statsButton1.png");
+	statsButton->setPosition(Vec2(Size.width - 320 + Origin.x, Size.height - 750 + Origin.y));
+	backgroundMainMenu->addChild(statsButton);
+
+	statsButton->addClickEventListener([=](Ref* sender) {
+		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
+		this->showStatsPopup();
 		});
 
 	// Options 
@@ -204,7 +214,7 @@ void MainMenuGameScene::showPauseMenuPopupOne() {
 		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
 		dimLayer->removeFromParent();
 		});
-} 
+} // con nut resume lam sau (luu du lieu game)
 
 void MainMenuGameScene::showPauseMenuPopupTwo() {
 	auto Size = Director::getInstance()->getVisibleSize();
@@ -247,18 +257,56 @@ void MainMenuGameScene::showPauseMenuPopupTwo() {
 		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
 		dimLayer->removeFromParent();
 		});
-
-	//// Resume button
-	//auto resumeButton = ui::Button::create("UI/resume1.png", "UI/resume2.png");
-	//resumeButton->setPosition(Vec2(Size.width / 2 + 95 + Origin.x, Size.height / 2 - 290 + Origin.y));
-	//popup->addChild(resumeButton);
-
-	//resumeButton->addClickEventListener([=](Ref* sender) {
-	//	SoundManager::getInstance()->playSFX("Sound/Click.mp3");
-	//	dimLayer->removeFromParent();
-	//	});
-
 } // con nut resume lam sau (luu du lieu game)
+
+void MainMenuGameScene::showStatsPopup() {
+	auto Size = Director::getInstance()->getVisibleSize();
+	auto Origin = Director::getInstance()->getVisibleOrigin();
+	// Tao popup thong ke 
+	auto dimLayer = LayerColor::create(Color4B(0, 0, 0, 180));
+	this->addChild(dimLayer, 100);
+	auto touchListener = EventListenerTouchOneByOne::create();
+	touchListener->setSwallowTouches(true);
+	touchListener->onTouchBegan = [](Touch* touch, Event* event) {
+		return true;
+		};
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, dimLayer);
+	auto popup = Sprite::create("UI/StatsGame.png");
+	popup->setPosition(Vec2(Size.width / 2 + Origin.x, Size.height / 2 + Origin.y));
+	popup->setScale(0.6f);
+	dimLayer->addChild(popup);
+
+	// Thong ke
+	int wins = StatsManager::getInstance()->getWins();
+	int losses = StatsManager::getInstance()->getLoses();
+	int draws = StatsManager::getInstance()->getDraws();
+	int totalGames = wins + losses + draws;
+		
+	// Tao cac label thong ke
+	auto createNumberLabel = [&](const std::string& text, float offsetY) {
+		auto label = Label::createWithTTF(text, "fonts/arial.ttf", 65);
+		label->setAnchorPoint(Vec2(0, 0.5f));
+		label->setColor(Color3B::BLACK);
+		label->enableOutline(Color4B::BLACK, 1);
+		label->setPosition(Vec2(popup->getContentSize().width / 2 + 350, popup->getContentSize().height / 2 + offsetY));
+		popup->addChild(label);
+		};
+
+	createNumberLabel(std::to_string(totalGames), 350);  // Total games
+	createNumberLabel(std::to_string(wins), 200);         // Wins
+	createNumberLabel(std::to_string(losses), 36);      // Losses
+	createNumberLabel(std::to_string(draws), -120);      // Draws
+
+	// Back button 
+	auto backButton = ui::Button::create("UI/BackButton1.png", "UI/BackButton2.png");
+	backButton->setPosition(Vec2(popup->getContentSize().width / 2, popup->getContentSize().height / 2 - 450));
+	popup->addChild(backButton);
+
+	backButton->addClickEventListener([=](Ref* sender) {
+		dimLayer->removeFromParent();
+		});
+
+}
 
 void MainMenuGameScene::showOptionsPopup() {
 	auto Size = Director::getInstance()->getVisibleSize();
@@ -329,6 +377,7 @@ void MainMenuGameScene::showOptionsPopup() {
 
 	backButton->addClickEventListener([=](Ref* sender) {
 		SoundManager::getInstance()->playSFX("Sound/Click.mp3");
+
 		SoundManager::getInstance()->setBackgroundMusicVolume(originalMusicVolume);
 
 		dimLayer->removeFromParent();

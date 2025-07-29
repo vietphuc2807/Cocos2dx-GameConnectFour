@@ -26,6 +26,8 @@ private:
 	void showPauseMenuPopupOne();
 
 	void showPauseMenuPopupTwo();
+	
+	void showStatsPopup();
 
 	void showOptionsPopup();
 

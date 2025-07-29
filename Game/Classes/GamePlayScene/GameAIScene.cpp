@@ -1,11 +1,11 @@
-#include "GameplayScene/GameAIScene.h"
+﻿#include "GameplayScene/GameAIScene.h"
 #include "Scene/MainMenuGame_Scene.h"
 #include "Manager/GameManager.h";
 #include "Manager/SoundManager.h";
-#include "GamePlayScene/AI.h"
-#include "Utils/Utils.h"
+#include "Manager/StatsManager.h"
+#include "AI.h"
+#include "Utils.h"
 #include <vector>
-#include "GamePlayScene/Popups.h"
 
 USING_NS_CC;
 
@@ -156,60 +156,60 @@ void GameAIScene::showPauseMenuPopup() {
 }
 
 void GameAIScene::initBoard() {
+	
+		// Co dinh vi tri tung o cua quan co 
+		cellPositions[0][0] = Vec2(245, 572);
+		cellPositions[0][1] = Vec2(515, 572);
+		cellPositions[0][2] = Vec2(808, 572);
+		cellPositions[0][3] = Vec2(1095, 572);
+		cellPositions[0][4] = Vec2(1370, 572);
 
-	// Co dinh vi tri tung o cua quan co 
-	cellPositions[0][0] = Vec2(245, 572);
-	cellPositions[0][1] = Vec2(515, 572);
-	cellPositions[0][2] = Vec2(808, 572);
-	cellPositions[0][3] = Vec2(1095, 572);
-	cellPositions[0][4] = Vec2(1370, 572);
+		cellPositions[1][0] = Vec2(245, 835);
+		cellPositions[1][1] = Vec2(515, 835);
+		cellPositions[1][2] = Vec2(808, 835);
+		cellPositions[1][3] = Vec2(1095, 835);
+		cellPositions[1][4] = Vec2(1370, 835);
 
-	cellPositions[1][0] = Vec2(245, 835);
-	cellPositions[1][1] = Vec2(515, 835);
-	cellPositions[1][2] = Vec2(808, 835);
-	cellPositions[1][3] = Vec2(1095, 835);
-	cellPositions[1][4] = Vec2(1370, 835);
+		cellPositions[2][0] = Vec2(245, 1102);
+		cellPositions[2][1] = Vec2(515, 1102);
+		cellPositions[2][2] = Vec2(808, 1102);
+		cellPositions[2][3] = Vec2(1095, 1102);
+		cellPositions[2][4] = Vec2(1370, 1102);
 
-	cellPositions[2][0] = Vec2(245, 1102);
-	cellPositions[2][1] = Vec2(515, 1102);
-	cellPositions[2][2] = Vec2(808, 1102);
-	cellPositions[2][3] = Vec2(1095, 1102);
-	cellPositions[2][4] = Vec2(1370, 1102);
+		cellPositions[3][0] = Vec2(245, 1367);
+		cellPositions[3][1] = Vec2(515, 1367);
+		cellPositions[3][2] = Vec2(808, 1367);
+		cellPositions[3][3] = Vec2(1095, 1367);
+		cellPositions[3][4] = Vec2(1370, 1367);
 
-	cellPositions[3][0] = Vec2(245, 1367);
-	cellPositions[3][1] = Vec2(515, 1367);
-	cellPositions[3][2] = Vec2(808, 1367);
-	cellPositions[3][3] = Vec2(1095, 1367);
-	cellPositions[3][4] = Vec2(1370, 1367);
+		cellPositions[4][0] = Vec2(245, 1632);
+		cellPositions[4][1] = Vec2(515, 1632);
+		cellPositions[4][2] = Vec2(805, 1632);
+		cellPositions[4][3] = Vec2(1095, 1632);
+		cellPositions[4][4] = Vec2(1370, 1632);
 
-	cellPositions[4][0] = Vec2(245, 1632);
-	cellPositions[4][1] = Vec2(515, 1632);
-	cellPositions[4][2] = Vec2(805, 1632);
-	cellPositions[4][3] = Vec2(1095, 1632);
-	cellPositions[4][4] = Vec2(1370, 1632);
+		cellPositions[5][0] = Vec2(245, 1895);
+		cellPositions[5][1] = Vec2(515, 1895);
+		cellPositions[5][2] = Vec2(805, 1895);
+		cellPositions[5][3] = Vec2(1095, 1895);
+		cellPositions[5][4] = Vec2(1370, 1895);
 
-	cellPositions[5][0] = Vec2(245, 1895);
-	cellPositions[5][1] = Vec2(515, 1895);
-	cellPositions[5][2] = Vec2(805, 1895);
-	cellPositions[5][3] = Vec2(1095, 1895);
-	cellPositions[5][4] = Vec2(1370, 1895);
-
-	// Tao vung cham cho tung cot
-	for (int col = 0; col < 5; col++) {
-		auto listener = EventListenerTouchOneByOne::create();
-		listener->onTouchBegan = [=](Touch* touch, Event* event) {
-			SoundManager::getInstance()->playSFX("Sound/Click.mp3");
-			Vec2 touchLoc = BackgroundGame->convertToNodeSpace(touch->getLocation());
-			Vec2 cell = cellPositions[5][col];
-			if (fabs(touchLoc.x - cell.x) < 80) {
-				if (currentPlayer == 1 && isGameStarted)
+		// Tao vung cham cho tung cot
+		for (int col = 0; col < 5; col++) {
+			auto listener = EventListenerTouchOneByOne::create();
+			listener->onTouchBegan = [=](Touch* touch, Event* event) {
+				SoundManager::getInstance()->playSFX("Sound/Click.mp3");
+				Vec2 touchLoc = BackgroundGame->convertToNodeSpace(touch->getLocation());
+				Vec2 cell = cellPositions[5][col];
+				if (fabs(touchLoc.x - cell.x) < 80) {
+					if (currentPlayer == 1 && isGameStarted)	
 					dropPiece(col);
-				return true;
-			}
-			return false;
-			};
-		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-	}
+					return true;
+				}
+				return false;
+				};
+			_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+		}
 }
 
 void GameAIScene::dropPiece(int col)
@@ -245,20 +245,33 @@ void GameAIScene::dropPiece(int col)
 
 			// Kiem tra thang 
 			if (Utils::checkWin(board, row, col)) {
+				// VIẾT TẠM // ( chỗ này là popup scene win trong figma )
+				auto alert = Label::createWithTTF("Player " + std::to_string(currentPlayer) + " wins!", "fonts/Marker Felt.ttf", 80);
+				alert->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2));
+				alert->setColor(Color3B::RED);
+				BackgroundGame->addChild(alert, 100);
+				_eventDispatcher->removeAllEventListeners();
+				// Cap nhat thong ke thang
 				if (currentPlayer == 1) {
-					// Ng??i ch?i th?ng
-					Popups::showPopupWinAI(this, currentPlayer);
+					StatsManager::getInstance()->addWin();
 				}
 				else {
-					// AI th?ng ? ng??i ch?i thua
-					Popups::showPopupLoseAI(this, currentPlayer);
+					StatsManager::getInstance()->addLose();
 				}
 				return;
 			}
 
 			// Kiem tra hoa
 			if (Utils::isBoardFull(board)) {
-				Popups::showPopupDrawAI(this, currentPlayer);
+				// VIẾT TẠM // ( chỗ này là popup scene draw trong figma )
+				auto alert = Label::createWithTTF("It's a Draw!", "fonts/Marker Felt.ttf", 80);
+				alert->setPosition(Director::getInstance()->getVisibleSize() / 2);
+				alert->setColor(Color3B::GRAY);
+				BackgroundGame->addChild(alert, 100);
+				_eventDispatcher->removeAllEventListeners();
+				// Cap nhat thong ke hoa
+				StatsManager::getInstance()->addDraw();
+				return;
 			}
 
 			// Doi luot choi
